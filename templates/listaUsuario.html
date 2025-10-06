@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://dmanzanares.pythonanywhere.com/listar -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Lista de Usuarios</title>
+    <!-- Required meta tags -->
+
+
+    <!-- Bootstrap CSS v5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.css" rel="stylesheet">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+    <!--camdd-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="./Lista de Usuarios_files/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="./Lista de Usuarios_files/sweetalert2.min.css">
+    <script src="./Lista de Usuarios_files/sweetalert2.all.min.js.descarga"></script>
+    <style>
+        .bg {
+            background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+            background: linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+        }
+
+        .btn1 {
+            position: relative;
+            background: -webkit-linear-gradient(90deg, #0061fe, #be38f3);
+            /*background: linear-gradient(90deg, #0061fe, #be38f3);*/
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Borde animado estilo neón */
+        .btn1::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f6ff, #be38f3, #3898ff, #0047cc, #00f6ff);
+            background-size: 400%;
+            border-radius: 10px;
+            z-index: -1;
+            animation: neonBorder 6s linear infinite;
+        }
+
+        .btn1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            border-radius: 8px;
+            z-index: -2;
+            box-shadow: 0 0 20px #00f6ff, 0 0 40px #ff00f2, 0 0 60px #00ff6e;
+        }
+
+        @keyframes neonBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    
+    </style>
+
+    <!-- iconos de bootstrap -->
+    <link rel="stylesheet" href="./Lista de Usuarios_files/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="./Lista de Usuarios_files/estilo.css">
+    <!-- DataTables -->
+    <link href="./Lista de Usuarios_files/datatables.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-success bg-opacity-10">
+    <header>
+        <!-- place navbar here -->
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark"
+            style="background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);">
+            <div class="container">
+                <a class="navbar-brand" href="#">Sistema</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-
+                    target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav justify-content-center flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Productos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('listaProductos') }}">Listar</a></li>
+                                <li><a class="dropdown-item" href="#"></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('listaUsuario') }}">Perfil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"></a>
+                        </li>
+                    </ul>
+                    <!-- Botón de salir -->     
+                    <a class="btn btn1" href="{{ url_for('logout') }}">SALIR</a>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <main>
+
+        <div class="container p-5 mt-3">
+
+            {% if mensaje %}
+            <div id="alert-message" data-message="{{ mensaje }}" data-type="{{ tipo }}"></div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body shadow-lg rounded"
+                    style="background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Agregar Usuario
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal"
+                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered"> <!--Centrar el formulario-->
+                            <div class="modal-content">
+                                <div class="modal-header"
+                                    style="background: linear-gradient(220deg, #ffffff,#605aff,#2600ff);">
+                                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Registro de Usuarios
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('listaUsuario') }}" method="POST">
+                                        <div class=" form-floating mb-2">
+                                            <input type="text" class="form-control" name="nombre" id="name"
+                                                aria-describedby="helpId" placeholder="Nombre Completo" required="">
+
+                                            <label for="nombre" class="form-label">Nombre Completo</label>
+                                        </div>
+                                        <div class=" form-floating mb-2">
+                                            <input type="text" class="form-control" name="email" id="email"
+                                                aria-describedby="helpId" placeholder="Correo Electronico" required="">
+
+                                            <label for="email" class="form-label">Correo Electronico</label>
+                                        </div>
+                                        <div class=" form-floating mb-2">
+                                            <input type="text" class="form-control" name="password" id="password"
+                                                aria-describedby="helpId" placeholder="Contraseña" required="">
+
+                                            <label for="password" class="form-label">Contraseña</label>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
+
+                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Tabla de Usuarios -->
+            <h1 class="text-center">Lista de Usuarios</h1>
+            <div class="caja">
+                {% for usuario in usuarios %}
+
+                <div id="modaledit{{ usuario.id }}" class="modal fade" data-bs-backdrop="static"
+                    data-bs-keyboard="false" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header"
+                                style="background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">
+                                <h4 class="modal-title text-white">Actualizar información</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <!-- MODAL -->
+                            <form id="form-actualizar" action="{{ url_for('updateUsuario') }}" method="POST">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Id</label>
+                                        <span class="form-control">{{ usuario.id }}</span>
+                                        <input type="hidden" name="id" value="{{ usuario.id }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Correo electrónico</label>
+                                        <input type="email" class="form-control" name="email"
+                                            value="{{ usuario.email }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="text" class="form-control" name="password"
+                                            value="{{ usuario.password }}" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button class="btn btn-primary" type="submit">Actualizar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+            </div>
+            <p>Total usuarios: {{ usuarios|length }}</p>
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Nº</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario['id'] }}</td>
+                        <td>{{ usuario['email'] }}</td>
+                        <td>{{ usuario['password'] }}</td>
+                        <td>
+                            <a href="javascript:void(0);" class="btn btn-success btn-sm edit-user-btn"
+                                data-bs-toggle="modal" data-bs-target="#modaledit{{ usuario.id }}">Editar</a>
+
+                            <a href="javascript:void(0);" onclick="confirmarEliminacion(this)"
+                                data-id="{{ usuario.id }}" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        </div>
+
+        <<ul class="flashes">
+
+            <script type="text/javascript">
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Se actualizo Satisfactoriamente"
+                });
+            </script>
+
+            </ul>>
+
+    </main>
+    <footer>
+        <hr>
+        <div class="container bg-light">
+            <p class="text-center">Copyright © 2025 - UNAN Managua</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="./Lista de Usuarios_files/popper.min.js.descarga"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="./Lista de Usuarios_files/bootstrap.min.js.descarga"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+    <!--MENSAJE DE ALERTA SweetAlert2-->
+
+
+    <!--  <script src="/static//js/script.js"></script> -->
+    <script src="./Lista de Usuarios_files/datatables.min.js.descarga"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <!-- Mensaje de ALERTA SALIR DEL SISTEMA -->
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="mensaje"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('hidden.bs.modal', function () {
+                location.reload();
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const alertBox = document.getElementById('alert-message');
+            const message = alertBox?.dataset.message;
+            const type = alertBox?.dataset.type;
+
+            if (message && type) {
+                Swal.fire({
+                    title: message,
+                    icon: type,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutBtn = document.querySelector('a[href="/logout"]');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Está seguro que desea cerrar el sistema?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, cerrar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = logoutBtn.href;
+                        }
+                    });
+                });
+            }
+        });
+
+        //funcion para eliminar
+        function confirmarEliminacion(elemento) {
+            const id = elemento.getAttribute('data-id');
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/eliminar/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                elemento.closest('tr').remove();
+                                Swal.fire('Eliminado', data.message, 'success');
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Ocurrió un problema al eliminar.', 'error');
+                        });
+                }
+            });
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('form-actualizar');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Evita el envío tradicional
+
+                const formData = new FormData(form);
+
+                fetch('/updateUsuario', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Éxito', 'Usuario actualizado correctamente', 'success');
+                            // Opcional: cerrar modal, recargar tabla, etc.
+                        } else {
+                            Swal.fire('Error', data.message || 'No se pudo actualizar el usuario.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'Ocurrió un problema al actualizar.', 'error');
+                    });
+            });
+        });
+        /*
+           <ul class=flashes>
+
+            <script type="text/javascript">
+                Swal.fire({
+                    title: "Sistema de registro",
+                    text: "Se actualizo Satisfactoriamente",
+                    icon: "success"
+                });
+
+            </ul>
+        */
+
+    </script>
+
+    <!--MENSAJE DE ALERTA Flash y SweetAlert2
+  
+  
+  -->
+
+    <!-- MENSAJE DE ALERTA BIENVENIDA DEL SISTEMA 
+
+
+  -->
+
+
+
+</body>
+
+</html>

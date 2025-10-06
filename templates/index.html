@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Prueba{% endblock title %}
+{% block body%}
+<!--Carrusel de imagenes-->
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{{url_for('static', filename='img/Gemini_Generated_Image_ay3252ay3252ay32.png')}}"
+                style="width:1400px; height:338px; object-fit:cover;" class="d-block mx-auto" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="{{url_for('static', filename='img/Gemini_Generated_Image_qh4k45qh4k45qh4k.png')}}"
+                style="width:1400px; height:338px; object-fit:cover;" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="{{url_for('static', filename='img/Gemini_Generated_Image_yu1q3qyu1q3qyu1q.png')}}"
+                style="width:1400px; height:338px; object-fit:cover;" class="d-block w-100" alt="...">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!--Informacion-->
+<div class="container my-5">
+    <h3 class="text-center mb-4">INFORMACION</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">¿Cómo Ahorrar y Manejar tus Finanzas?</h5>
+                    <p class="card-text">Gestionar tus finanzas personales eficazmente te permite alcanzar
+                        metas y asegurar tu futuro. Esto incluye estrategias como:
+                        Establecer un presupuesto (control de gastos)
+                        Reducir deudas (priorizar pagos con interés alto)
+                        Invertir inteligentemente (crecimiento a largo plazo)
+                        Construir un fondo de emergencia (seguridad financiera)
+                        Planificar para la jubilación (visión a futuro)
+                        Tomar decisiones financieras informadas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">¿Qué te permite hacer el Control de Gastos?</h5>
+                    <p class="card-text">Controlar tus gastos te da el poder de gestionar tu dinero de manera proactiva.
+                        Las principales ventajas son:
+                        Optimizar tus finanzas (identificar fugas de dinero)
+                        Tomar decisiones informadas (saber en qué inviertes)
+                        Alcanzar metas financieras (ahorro para viajes o inversiones)
+                        Crear un presupuesto realista (ajustado a tus ingresos y necesidades)
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">¿En qué beneficia el manejo de gastos?</h5>
+                    <p class="card-text">Manejar tus gastos mejora tu estabilidad económica y
+                        te da control sobre tus finanzas. Te ayuda a tomar decisiones más inteligentes
+                        basadas en tus propios ingresos, a evitar deudas innecesarias
+                        y a invertir en un futuro más seguro.
+                        Te permite alcanzar metas de corto y largo plazo.
+                        En casa, puede adaptarse a tu estilo de vida.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Servicios-->
+<div class="container my-5">
+    <h3 class="text-center mb-4">SERVICIOS</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <img src="{{url_for('static', filename='img/servicioIA.png')}}"
+                    class="card-img-top rounded-circle mx-auto d-block mt-3"
+                    style="width:180px; height:180px; object-fit:cover;" alt="ventas">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Reglas básicas para ahorrar</h5>
+                    <p class="card-text">Para tener finanzas personales sanas, puedes usar herramientas que te ayuden a
+                        automatizar el ahorro, registrando tus ingresos y egresos de dinero.
+                        Esto te permite tener un control total de tus gastos y planificar
+                        tus metas a corto y largo plazo.
+                        El ahorro es una clave importante para alcanzar la independencia financiera.</p>
+                    <a href="#" class="btn btn-primary">Ver más...</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <img src="{{url_for('static', filename='img/servicioIA2.png')}}"
+                    class="card-img-top rounded-circle mx-auto d-block mt-3"
+                    style="width:180px; height:180px; object-fit:cover;" alt="productos">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Planificación y Metas Financieras</h5>
+                    <p class="card-text">Una de las mejores formas de ahorrar es planificar tus finanzas y fijar
+                        metas claras. Esto te permite tener un objetivo, ya sea a corto o
+                        largo plazo. Se usa para ahorrar para un viaje, comprar una casa,
+                        o invertir en tu futuro. Tener metas te ayuda a mantener la disciplina.</p>
+                    <a href="#" class="btn btn-primary">Ver más...</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <img src="{{url_for('static', filename='img/servicioIA3.png')}}"
+                    class="card-img-top rounded-circle mx-auto d-block mt-3"
+                    style="width:180px; height:180px; object-fit:cover;" alt="carrito">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Reglas de Oro para Ahorrar</h5>
+                    <p class="card-text">Una regla esencial en las finanzas es **pagarte a ti mismo primero**.
+                        Esto significa que, antes de cubrir cualquier otro gasto, destines un porcentaje
+                        de tus ingresos al ahorro. Este simple hábito te ayudará a acumular capital de forma
+                        constante y a asegurar tu futuro financiero. Es una práctica para todos.</p>
+                    <a href="#" class="btn btn-primary">Ver más...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .carousel{
+        margin-top: 70px;
+    }
+</style>
+
+</header>
+{% endblock %}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Gastos</title>
+
+    <!-- Bootstrap CSS v5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.css" rel="stylesheet">
+
+    <style>
+        .bg {
+            background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+            background: linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+        }
+
+        .btn1 {
+            position: relative;
+            background: -webkit-linear-gradient(90deg, #0061fe, #be38f3);
+            color: #ffffff;
+            /* Cambio a blanco para mejor contraste */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .btn1::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f6ff, #be38f3, #3898ff, #0047cc, #00f6ff);
+            background-size: 400%;
+            border-radius: 10px;
+            z-index: -1;
+            animation: neonBorder 6s linear infinite;
+        }
+
+        .btn1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            border-radius: 8px;
+            z-index: -2;
+            box-shadow: 0 0 20px #00f6ff, 0 0 40px #ff00f2, 0 0 60px #00ff6e;
+        }
+
+        @keyframes neonBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Estilo para el modal */
+        .modal-content {
+            background: linear-gradient(135deg, #0047cc, #3898ff);
+            color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+    .custom-button {
+        margin-right: 10px; 
+    }
+    .custom-button:last-child {
+        margin-right: 0;
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark"
+        style="background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);">
+        <div class="container">
+            <a class="navbar-brand" href="#">Sistema</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav justify-content-center flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Productos
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Agregar</a></li>
+                            <li><a class="dropdown-item" href="#">Listar</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Perfil</a>
+                    </li>
+                </ul>
+                {% if session['nombre'] %}
+                <span class="navbar-text text-light ms-2">Bienvenido: {{ session['nombre'] }}</span>
+                {% endif %}
+                <a class="btn btn1" href="{{ url_for('logout') }}">SALIR</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container p-5 mt-3">
+        <h2 class="text-center alert alert-danger py-4 shadow">Gestión de Gastos</h2>
+
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Tabla de gastos con DataTables -->
+        <div id="tablaGastos_wrapper" class="dt-container dt-empty-footer">
+
+            <div class="dt-layout-row dt-layout-table">
+                <div class="dt-layout-cell dt-layout-full">
+                    <table id="tablaGastos" class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for gasto in gastos %}
+                            <tr {% if gasto.monto> 40 %}class="table-danger"{% endif %}>
+                                <td>{{ gasto['tipo'] }}</td>
+                                <td>{{ gasto['categoria'] }}</td>
+                                <td>C$ {{ "%.2f"|format(gasto['monto']) }}</td>
+                                <td>{{ gasto['fecha'] }}</td>
+                                <td>{{ gasto['descripcion'] }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-warning edit-btn"
+                                        data-id="{{ gasto['id_gasto'] }}">Editar</a>
+                                    <a href="#" class="btn btn-sm btn-danger delete-btn"
+                                        data-id="{{ gasto['id_gasto'] }}">Eliminar</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No hay gastos registrados.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dt-autosize" style="width: 100%; height: 0px;"></div>
+        </div>
+    </div>
+
+    <!-- Modal para editar/agregar gasto (oculto por defecto) -->
+    <div class="modal fade" id="gastoModal" tabindex="-1" aria-labelledby="gastoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="background: linear-gradient(135deg, #0047cc, #3898ff); color: #ffffff; border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gastoModalLabel">Editar Gasto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="gastoForm" action="{{ url_for('control') }}" method="POST">
+                        <input type="hidden" name="id_gasto" id="gastoId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="tipo" class="form-label text-white">Tipo</label>
+                                <input type="text" class="form-control" id="tipo" name="tipo" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="categoria" class="form-label text-white">Categoría</label>
+                                <select class="form-select" id="categoria" name="categoria" required>
+                                    <option value="Alimentación">Alimentación</option>
+                                    <option value="Transporte">Transporte</option>
+                                    <option value="Ocio">Ocio</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="monto" class="form-label text-white">Monto</label>
+                                <input type="number" step="0.01" class="form-control" id="monto" name="monto" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fecha" class="form-label text-white">Fecha</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="descripcion" class="form-label text-white">Descripción</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-outline-success">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---->
+    <div class="text-center mb-4">
+        <button class="btn btn1" data-bs-toggle="modal" data-bs-target="#gastoModal" id="addGastoBtn">Agregar Nuevo
+            Gasto</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.bootstrap5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const gastoModal = new bootstrap.Modal(document.getElementById('gastoModal'));
+            const gastoForm = document.getElementById('gastoForm');
+
+            // Configuración de DataTables
+            var table = new DataTable('#tablaGastos', {
+                layout: {
+                    top1Start: {
+                       buttons: [
+                    { 
+                        extend: 'copyHtml5', 
+                        text: '<img src="{{ url_for(\'static\', filename=\'img/copy.png\') }}" alt="Copy" class="button-icon" style="width: 16px; height: 16px; margin-right: 5px;"> <i class="btn btn-outline-secondary btn-sm bi bi-copy"></i>',
+                        titleAttr: 'Copiar', 
+                        className: 'btn btn-primary custom-button' 
+                    },
+                    { 
+                        extend: 'excel', 
+                        text: '<img src="{{ url_for(\'static\', filename=\'img/sheet.png\') }}" alt="Excel" class="button-icon" style="width: 16px; height: 16px; margin-right: 5px;"> <i class="btn btn-outline-success btn-sm bi bi-file-earmark-excel-fill"></i>', 
+                        titleAttr: 'Exporta a Excel', 
+                        className: 'btn btn-success custom-button' 
+                        
+                    },
+                    { 
+                        extend: 'pdf', 
+                        text: '<img src="{{ url_for(\'static\', filename=\'img/pdf.png\') }}" alt="PDF" class="button-icon" style="width: 16px; height: 16px; margin-right: 5px;"> <i class="btn btn-outline-danger btn-sm bi bi-file-earmark-pdf-fill"></i>', 
+                        titleAttr: 'Exporta a pdf', 
+                        className: 'btn btn-danger custom-button' 
+                    },
+                    { 
+                        extend: 'print', 
+                        text: '<img src="{{ url_for(\'static\', filename=\'img/printer.png\') }}" alt="Print" class="button-icon" style="width: 16px; height: 16px; margin-right: 5px;"> <i class="btn btn-outline-info btn-sm bi bi-printer-fill"></i>', 
+                        titleAttr: 'Imprimir', 
+                        className: 'btn btn-info custom-button' 
+                    },
+                    { 
+                        extend: 'colvis', 
+                        text: '<img src="{{ url_for(\'static\', filename=\'img/eye.png\') }}" alt="Visibility" class="button-icon" style="width: 16px; height: 16px; margin-right: 5px;"> <i class="btn btn-outline-secondary btn-sm bi bi-eye-fill"></i>', 
+                        titleAttr: 'Visibilidad', 
+                        className: 'btn btn-secondary custom-button' 
+                    }
+                        ]
+                    }
+                },
+                pageLength: 5,
+                lengthMenu: [10, 25, 50],
+                order: [[1, "asc"]],
+                columnDefs: [
+                    { targets: [0, 2, 3, 4, 5], orderable: false },
+                    { searchable: false, targets: [0, 2, 3, 4, 5] },
+                    { width: '5%', targets: [0] }
+                ],
+                language: {
+                    "aria": {
+                        "orderable": "Activar para ordenar",
+                        "orderableRemove": "Activar para quitar ordenación",
+                        "orderableReverse": "Activar para ordenar de forma inversa",
+                        "paginate": { "first": "Primero", "last": "Último", "next": "Siguiente", "previous": "Anterior" }
+                    },
+                    "emptyTable": "Ningún dato disponible en esta tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "zeroRecords": "No se encontraron resultados"
+                }
+        });
+
+        // Manejar clic en "Editar"
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const id_gasto = this.getAttribute('data-id');
+
+                fetch(`/get_gasto/${id_gasto}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const gasto = data.gasto;
+                            document.getElementById('gastoId').value = gasto.id_gasto;
+                            document.getElementById('tipo').value = gasto.tipo || '';
+                            document.getElementById('categoria').value = gasto.categoria || '';
+                            document.getElementById('monto').value = gasto.monto || '';
+                            document.getElementById('fecha').value = gasto.fecha || '';
+                            document.getElementById('descripcion').value = gasto.descripcion || '';
+                            gastoModal.show(); // Mostrar el modal para edición
+                        } else {
+                            Swal.fire('Error', data.message || 'No se pudo cargar el gasto.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'Ocurrió un problema al cargar el gasto.', 'error');
+                    });
+            });
+        });
+
+        // Manejar clic en "Eliminar"
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const id_gasto = this.getAttribute('data-id');
+
+                Swal.fire({
+                    title: '¿Eliminar este gasto?',
+                    text: '¡No podrás revertir esto!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/delete/${id_gasto}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    table.row($(this).parents('tr')).remove().draw();
+                                    Swal.fire('Eliminado', data.message, 'success');
+                                } else {
+                                    Swal.fire('Error', data.message, 'error');
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire('Error', 'Ocurrió un problema al eliminar.', 'error');
+                            });
+                    }
+                });
+            });
+        });
+
+        // Manejar envío del formulario (edición o registro)
+        gastoForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const action = this.action;
+
+            fetch(action, {
+                method: 'POST',
+                body: new URLSearchParams(formData).toString(),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        gastoModal.hide();
+                        table.ajax.reload(null, false); // Recargar tabla sin reiniciar paginación
+                        Swal.fire('Éxito', data.message, 'success');
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error', 'Ocurrió un problema al guardar.', 'error');
+                });
+        });
+
+        // Manejar clic en "Agregar Nuevo Gasto"
+        document.getElementById('addGastoBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            // Limpiar el formulario para un nuevo registro
+            document.getElementById('gastoId').value = '';
+            document.getElementById('tipo').value = '';
+            document.getElementById('categoria').value = 'Alimentación';
+            document.getElementById('monto').value = '';
+            document.getElementById('fecha').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('gastoModalLabel').textContent = 'Agregar Nuevo Gasto';
+            gastoModal.show();
+        });
+        });
+
+        // Activar tooltips de Bootstrap
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="mensaje"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    </script>
+</body>
+
+</html>

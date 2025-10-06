@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>{% block title %} {% endblock title %}</title>
+
+    <style>
+        .bg {
+            background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+            background: linear-gradient(90deg, #0047cc, #005aff, #3898ff);
+        }
+
+        .btn1 {
+            position: relative;
+            background: -webkit-linear-gradient(90deg, #0061fe, #be38f3);
+            /*background: linear-gradient(90deg, #0061fe, #be38f3);*/
+            color: #000000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Borde animado estilo neón */
+        .btn1::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f6ff, #be38f3, #3898ff, #0047cc, #00f6ff);
+            background-size: 400%;
+            border-radius: 10px;
+            z-index: -1;
+            animation: neonBorder 6s linear infinite;
+        }
+
+        .btn1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            border-radius: 8px;
+            z-index: -2;
+            box-shadow: 0 0 20px #00f6ff, 0 0 40px #ff00f2, 0 0 60px #00ff6e;
+        }
+
+        @keyframes neonBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.all.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-
+icons.min.css">
+
+    <link rel="stylesheet" href="#">
+
+    <link href="DataTables/datatables.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-success bg-opacity-10">
+    <header>
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark"
+            style="background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);">
+            <div class="container">
+                <a class="navbar-brand" href="#">Sistema</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-
+                    target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav justify-content-center flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Productos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('listaProductos') }}">Listar</a></li>
+                                <li><a class="dropdown-item" href="#"></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('listaUsuario') }}">Perfil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"></a>
+                        </li>
+                    </ul>
+
+                    {% if session['nombre'] %}
+                    <span class="navbar-text text-light ms-2">
+
+                        <!-- Bienvenido: -->
+                        {{ session['nombre'] }}
+                    </span>
+                    {% endif %}
+                    <a class="btn btn1" href="{{ url_for('logout') }}">SALIR</a>
+                </div>
+            </div>
+        </nav>
+        <!--- fin de nava-->>
+    </header>
+
+    <!--cuerpo-->
+
+    <!-- Contenedor de tarjetas -->
+    <div class="container mt-5">
+        <h2 class=" text-center py-4" style=" color: #ffffff; background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">Sistema de Gestión de gastos</h2>
+        <p></p>
+        <div class="row justify-content-center">
+            <!-- Tarjeta 1: Perfil del Usuario -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center bg-success-subtle">
+                    <div class="card-body">
+                        <img src="{{url_for('static', filename='img/Connected-amico.png')}}" alt="Usuarios"
+                            class="card-img-top mb-3" style="max-width: 100px;">
+                        <h5 class="card-title">Perfil del Usuario</h5>
+                        <a href="{{url_for('listaUsuario') }}" class="btn btn-success">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: Registrar Productos -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center bg-primary-subtle">
+                    <div class="card-body">
+                        <img src="{{url_for('static', filename='img/Spreadsheets-bro (1).png')}}" alt="Carrito"
+                            class="card-img-top mb-3" style="max-width: 100px;">
+                        <h5 class="card-title">Registrar Gastos</h5>
+                        <a href="{{url_for('control') }}" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Visualizar Productos -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center bg-info-subtle">
+                    <div class="card-body">
+                        <img src="{{url_for('static', filename='img/Receipt-amico.png')}}" alt="Lista"
+                            class="card-img-top mb-3" style="max-width: 100px;">
+                        <h5 class="card-title">Visualizar Gastos</h5>
+                        <a href="{{url_for('listaProductos') }}" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        {% block body %}
+        {% endblock %}
+    </main>
+    <footer>
+        <hr>
+        <div class="container bg-light">
+            <p class="text-center">Copyright © 2025 - UNAN Managua</p>
+        </div>
+    </footer>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <!--MENSAJE DE ALERTA SweetAlert2-->
+    <!-- <script src="{{url_for('static', filename='/js/script.js')}}"></script> -->
+    <script src="DataTables/datatables.min.js"></script>
+    <!-- Mensaje de ALERTA SALIR DEL SISTEMA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutBtn = document.querySelector('a[href="{{ url_for("logout") }}"]');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Está seguro que desea cerrar el sistema?',
+                        icon: 'warning',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, cerrar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = logoutBtn.href;
+                        }
+                    });
+                });
+            }
+        });
+    </script
+</body>
+</html>
