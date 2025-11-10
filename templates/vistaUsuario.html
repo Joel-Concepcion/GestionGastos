@@ -101,10 +101,10 @@ icons.min.css">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav justify-content-center flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('vistaUsuario') }}"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                            <a class="nav-link" href="{{ url_for('vistaUsuario') }}">Inicio</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -112,13 +112,13 @@ icons.min.css">
                                 Productos
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
-                                <li><a class="dropdown-item" href="{{url_for('listaProductos') }}">Listar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('control1') }}">Agregar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('listaProductos1') }}">Listar</a></li>
                                 <li><a class="dropdown-item" href="#"></a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url_for('listaUsuario') }}">Perfil</a>
+                            <a class="nav-link" href="{{url_for('vistaUsuario') }}">Perfil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"></a>
@@ -136,30 +136,16 @@ icons.min.css">
                 </div>
             </div>
         </nav>
-        <!--- fin de nava-->
+        <!--- fin de nava-->>
     </header>
 
     <!--cuerpo-->
 
     <!-- Contenedor de tarjetas -->
     <div class="container mt-5">
-        <h2 class=" text-center py-4"
-            style=" color: #ffffff; background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">Sistema de Gestión de
-            gastos</h2>
+        <h2 class=" text-center py-4" style=" color: #ffffff; background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">Sistema de Gestión de gastos</h2>
         <p></p>
         <div class="row justify-content-center">
-            <!-- Tarjeta 1: Perfil del Usuario -->
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 text-center bg-success-subtle">
-                    <div class="card-body">
-                        <img src="{{ url_for('static', filename='img/Connected-amico.png') }}" alt="Usuarios"
-                            class="card-img-top mb-3" style="max-width: 100px;">
-                        <h5 class="card-title">Perfil del Usuario</h5>
-                        <p class="card-text">Registrados: <strong>{{ contadorUsuarios }}</strong></p>
-                        <a href="{{ url_for('listaUsuario') }}" class="btn btn-success">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
 
             <!-- Tarjeta 2: Registrar Productos -->
             <div class="col-md-4 mb-4">
@@ -168,8 +154,7 @@ icons.min.css">
                         <img src="{{url_for('static', filename='img/Spreadsheets-bro (1).png')}}" alt="Carrito"
                             class="card-img-top mb-3" style="max-width: 100px;">
                         <h5 class="card-title">Registrar Gastos</h5>
-                        <p class="card-text">Registrados: <strong>{{ contadorGastos }}</strong></p>
-                        <a href="{{url_for('control') }}" class="btn btn-primary">Ver Detalles</a>
+                        <a href="{{url_for('control1') }}" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
             </div>
@@ -181,7 +166,7 @@ icons.min.css">
                         <img src="{{url_for('static', filename='img/Receipt-amico.png')}}" alt="Lista"
                             class="card-img-top mb-3" style="max-width: 100px;">
                         <h5 class="card-title">Visualizar Gastos</h5>
-                        <a href="{{url_for('listaProductos') }}" class="btn btn-primary">Ver Detalles</a>
+                        <a href="{{url_for('listaProductos1') }}" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
             </div>

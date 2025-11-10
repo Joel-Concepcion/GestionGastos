@@ -3,16 +3,17 @@ from flask_mysqldb import MySQL
 import traceback
 import MySQLdb.cursors 
 
+from passlib.hash import pbkdf2_sha256
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_segura'
 
 # Configuración de la base de datos
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = 'bzriokq8w1ja8kilnhbl-mysql.services.clever-cloud.com'
 app.config['MYSQL_PORT'] = 3306
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'JOEL2001'
-app.config['MYSQL_DB'] = 'registrogastos'
+app.config['MYSQL_USER'] = 'uvf565cymdupuorh'
+app.config['MYSQL_PASSWORD'] = 'xmm8z4rlb5etk2jbTIEK'
+app.config['MYSQL_DB'] = 'bzriokq8w1ja8kilnhbl'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
@@ -29,7 +30,7 @@ def login():
         if 'nombre' in request.form:
             nombre = request.form['nombre']
             email = request.form['email']
-            password = request.form['password']
+            password = pbkdf2_sha256.hash (request.form['password'])
 
             cursor = mysql.connection.cursor()
             cursor.execute("INSERT INTO usuario (email, password, id_rol) VALUES (%s, %s, %s)", (email, password, 2))
@@ -43,10 +44,10 @@ def login():
             
             #cursor = mysql.connection.cursor()
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute("SELECT * FROM usuario WHERE email = %s AND password = %s", (email, password))
+            cursor.execute("SELECT * FROM usuario WHERE email = %s", (email,))
             user = cursor.fetchone()
             cursor.close()
-            if user:
+            if user and pbkdf2_sha256.verify(password, user['password']):
                 session['logueado'] = True
                 session['id'] = user['id']
                 session['id_rol'] = user['id_rol']
@@ -55,7 +56,7 @@ def login():
                 if user['id_rol'] == 1:
                     return redirect(url_for('admin', email=user['email']))
                 elif user['id_rol'] == 2:
-                    return redirect(url_for('control'))
+                    return redirect(url_for('vistaUsuario'))
             else:
                 return render_template('login.html', error='Credenciales inválidas')
     return render_template('login.html', error='Mensaje')
@@ -66,7 +67,24 @@ def acercaDe():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    #ide de usuario
+    id_usuario = session.get('id')
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    #contador de usuarios
+    cursor.execute("SELECT COUNT(*) AS total FROM usuario")
+    resultado = cursor.fetchone()
+    contadorUsuarios = resultado['total'] if resultado else 0
+   
+
+    #contador de gastos
+    cursor.execute("SELECT COUNT(*) AS total FROM gastos WHERE id_usuario = %s", (id_usuario,))
+    resultado_gastos = cursor.fetchone()
+    contadorGastos = resultado_gastos['total'] if resultado_gastos else 0
+
+    cursor.close()
+
+    return render_template('admin.html', contadorUsuarios=contadorUsuarios, contadorGastos=contadorGastos)
 
 @app.route('/contacto')
 def contacto():
@@ -94,9 +112,10 @@ def listaUsuario():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT id, email, password FROM usuario ORDER BY id DESC")
     listaUsuario = cursor.fetchall()
+    contadorUsuarios = len(listaUsuario) #contador de usuarios
     cursor.close()
 
-    return render_template('listaUsuario.html', usuarios=listaUsuario)
+    return render_template('listaUsuario.html', usuarios=listaUsuario, contadorUsuarios=contadorUsuarios)
 
 
 #metodo POST para actualizar usuario
@@ -284,6 +303,85 @@ def delete_gasto(id_gasto):
         cursor.close()
         print(f"Error al eliminar: {str(e)}")  # Agrega logging para depuración
         return jsonify({'success': False, 'message': f'Error al eliminar: {str(e)}'}), 500
+    
+@app.route('/vistaUsuario')
+def vistaUsuario():
+    return render_template('vistaUsuario.html')
+
+@app.route('/control1')
+def control1():
+    if request.method == 'POST':
+        id_gasto = request.form.get('id_gasto') 
+        tipo = request.form['tipo']
+        categoria = request.form['categoria']
+        monto = request.form['monto']
+        fecha = request.form['fecha']
+        descripcion = request.form['descripcion']
+        id_usuario = session.get('id')
+
+        # funcion para actualización de un registro en este caps de la tabla gastos 
+        cursor = mysql.connection.cursor()
+        if id_gasto: 
+            cursor.execute("""
+                UPDATE gastos SET tipo = %s, categoria = %s, monto = %s, fecha = %s, descripcion = %s
+                WHERE id_gasto = %s AND id_usuario = %s
+            """, (tipo, categoria, monto, fecha, descripcion, id_gasto, id_usuario))
+            mysql.connection.commit()
+            cursor.close()
+            return jsonify({'success': True, 'message': 'Gasto actualizado exitosamente'})
+        else:  
+            cursor.execute("""
+                INSERT INTO gastos (tipo, categoria, monto, fecha, descripcion, id_usuario)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (tipo, categoria, monto, fecha, descripcion, id_usuario))
+            mysql.connection.commit()
+            cursor.close()
+            return jsonify({'success': True, 'message': 'Gasto registrado exitosamente'})
+
+    # Mostrar los gastos de la tabla
+    id_usuario = session.get('id')
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM gastos WHERE id_usuario = %s ORDER BY fecha DESC", (id_usuario,))
+    gastos = cursor.fetchall()
+    cursor.close()
+    return render_template('control1.html', gastos=gastos)
+    #return render_template('control1.html')
+@app.route('/listaProductos1', methods=['GET', 'POST'])
+def listaProductos1():
+    if request.method == 'POST':
+        id_gasto = request.form.get('id_gasto') 
+        tipo = request.form['tipo']
+        categoria = request.form['categoria']
+        monto = request.form['monto']
+        fecha = request.form['fecha']
+        descripcion = request.form['descripcion']
+        id_usuario = session.get('id')
+
+        cursor = mysql.connection.cursor()
+        if id_gasto: 
+            cursor.execute("""
+                UPDATE gastos SET tipo = %s, categoria = %s, monto = %s, fecha = %s, descripcion = %s
+                WHERE id_gasto = %s AND id_usuario = %s
+            """, (tipo, categoria, monto, fecha, descripcion, id_gasto, id_usuario))
+            mysql.connection.commit()
+            cursor.close()
+            return redirect(url_for('listaProductos1'))
+        else:  
+            cursor.execute("""
+                INSERT INTO gastos (tipo, categoria, monto, fecha, descripcion, id_usuario)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (tipo, categoria, monto, fecha, descripcion, id_usuario))
+            mysql.connection.commit()
+            cursor.close()
+            return redirect(url_for('listaProductos1'))
+
+    # Mostrar los gastos de la tabla
+    id_usuario = session.get('id')
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM gastos WHERE id_usuario = %s ORDER BY fecha DESC", (id_usuario,))
+    gastos = cursor.fetchall()
+    cursor.close()
+    return render_template('listaProductos1.html', gastos=gastos)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

@@ -89,10 +89,10 @@
                 background-position: 0% 50%;
             }
         }
-        .button{
+
+        .button {
             background-color: #0019f8;
         }
-    
     </style>
 
 </head>
@@ -104,18 +104,18 @@
             <div class="container">
                 <a class="navbar-brand" href="#">Sistema</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-
-                    target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav justify-content-center flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('vistaUsuario') }}"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                            <a class="nav-link" href="{{ url_for('vistaUsuario') }}">Inicio</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -123,13 +123,13 @@
                                 Productos
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
-                                <li><a class="dropdown-item" href="{{url_for('listaProductos') }}">Listar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('control1') }}">Agregar</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('listaProductos1') }}">Listar</a></li>
                                 <li><a class="dropdown-item" href="#"></a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url_for('listaUsuario') }}">Perfil</a>
+                            <a class="nav-link" href="{{url_for('vistaUsuario') }}">Perfil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"></a>
@@ -278,7 +278,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="categoria" class="form-label">Categoría</label>
-                                        <select class="form-select border-primary-subtle shadow-sm" id="categoria" name="categoria" required>
+                                        <select class="form-select border-primary-subtle shadow-sm" id="categoria"
+                                            name="categoria" required>
                                             <option value="" disabled selected>Selecciona una categoría</option>
                                             <option value="Alimentación">Alimentación</option>
                                             <option value="Transporte">Transporte</option>
@@ -346,40 +347,43 @@
                 }
             </style>
 
-            <table id="tablaGastos" class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Categoría</th>
-                        <th>Monto</th>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for gasto in gastos %}
-                    <tr {% if gasto.monto> 40 %}class="table-danger"{% endif %}>
-                        <td>{{ gasto['tipo'] }}</td>
-                        <td>{{ gasto['categoria'] }}</td>
-                        <td>C$ {{ "%.2f"|format(gasto['monto']) }}</td>
-                        <td>{{ gasto['fecha'] }}</td>
-                        <td>{{ gasto['descripcion'] }}</td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-success edit-btn edit-user-btn"
-                                data-id="{{ gasto['id_gasto'] }}" data-bs-target="#modaledit{{ gasto['id_gasto'] }}"
-                                data-bs-toggle="modal">Editar</a>
-                            <a href="#" class="btn btn-sm btn-danger delete-btn"
-                                data-id="{{ gasto['id_gasto'] }}">Eliminar</a>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="6" class="text-center">No hay gastos registrados.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <h4 class="mb-3">Gastos registrados</h4>
+            <div class="table-responsive">
+                <table id="tablaGastos" class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Categoría</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for gasto in gastos %}
+                        <tr {% if gasto.monto> 40 %}class="table-danger"{% endif %}>
+                            <td>{{ gasto['tipo'] }}</td>
+                            <td>{{ gasto['categoria'] }}</td>
+                            <td>C$ {{ "%.2f"|format(gasto['monto']) }}</td>
+                            <td>{{ gasto['fecha'] }}</td>
+                            <td>{{ gasto['descripcion'] }}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-success edit-btn edit-user-btn"
+                                    data-id="{{ gasto['id_gasto'] }}" data-bs-target="#modaledit{{ gasto['id_gasto'] }}"
+                                    data-bs-toggle="modal">Editar</a>
+                                <a href="#" class="btn btn-sm btn-danger delete-btn"
+                                    data-id="{{ gasto['id_gasto'] }}">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No hay gastos registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -413,6 +417,7 @@
 
     <!-- Tu script personalizado -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!--script>
         $(document).ready(function () {
@@ -471,7 +476,7 @@
                      '<"row"<"col-sm-12"tr>>' +
                      '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>' +
                      '<"row"<"col-sm-12"B>>',*/
-                    
+
                 buttons: [
                     {
                         extend: 'copy',

@@ -278,7 +278,7 @@
                 <tbody>
                     {% for usuario in usuarios %}
                     <tr>
-                        <td>{{ usuario['id'] }}</td>
+                        <td>{{loop.index}}</td>
                         <td>{{ usuario['email'] }}</td>
                         <td>{{ usuario['password'] }}</td>
                         <td>
@@ -431,7 +431,7 @@
             });
 
         }
-
+        
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('form-actualizar');
 

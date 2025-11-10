@@ -14,11 +14,6 @@
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS + Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <style>
         .bg {
             background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
@@ -98,10 +93,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav justify-content-center flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('admin') }}"></a>
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('vistaUsuario') }}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin') }}">Inicio</a>
+                        <a class="nav-link" href="{{ url_for('vistaUsuario') }}">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -109,13 +104,13 @@
                             Productos
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
-                            <li><a class="dropdown-item" href="{{url_for('listaProductos') }}">Listar</a></li>
+                            <li><a class="dropdown-item" href="{{url_for('control1') }}">Agregar</a></li>
+                            <li><a class="dropdown-item" href="{{url_for('listaProductos1') }}">Listar</a></li>
                             <li><a class="dropdown-item" href="#"></a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('listaUsuario') }}">Perfil</a>
+                        <a class="nav-link" href="{{url_for('vistaUsuario') }}">Perfil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"></a>
@@ -181,25 +176,21 @@
                                 <i class="bi bi-cash-stack me-1 text-primary"></i>Monto
                             </label>
                             <input type="number" step="0.01" class="form-control border-primary-subtle shadow-sm"
-                                id="monto" name="monto" placeholder="Ej: 120.50" required data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Ingresa el monto del gasto en formato decimal">
+                                id="monto" name="monto" placeholder="Ej: 120.50" required>
                         </div>
                         <div class="col-md-4">
                             <label for="fecha" class="form-label fw-semibold">
                                 <i class="bi bi-calendar-event me-1 text-primary"></i>Fecha
                             </label>
                             <input type="date" class="form-control border-primary-subtle shadow-sm" id="fecha"
-                                name="fecha" required data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Selecciona la fecha del gasto">
+                                name="fecha" required>
                         </div>
                         <div class="col-md-4">
                             <label for="descripcion" class="form-label fw-semibold">
                                 <i class="bi bi-chat-left-text me-1 text-primary"></i>Descripción
                             </label>
                             <input type="text" class="form-control border-primary-subtle shadow-sm" id="descripcion"
-                                name="descripcion" placeholder="Agrega una breve descripción" required
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Describe brevemente el gasto realizado">
+                                name="descripcion" placeholder="Agrega una breve descripción" required>
                         </div>
                     </div>
 
@@ -213,51 +204,75 @@
             </div>
         </div>
 
-
         <!-- Tabla de gastos -->
         <h4 class="mb-3">Gastos registrados</h4>
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Tipo</th>
-                    <th>Categoría</th>
-                    <th>Monto</th>
-                    <th>Fecha</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for gasto in gastos %}
-                <tr {% if gasto.monto> 40 %}class="table-danger"{% endif %}>
-                    <td>{{ gasto['tipo'] }}</td>
-                    <td>{{ gasto['categoria'] }}</td>
-                    <td>C$ {{ "%.2f"|format(gasto['monto']) }}</td>
-                    <td>{{ gasto['fecha'] }}</td>
-                    <td>{{ gasto['descripcion'] }}</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-success edit-btn edit-user-btn"
-                            data-id="{{ gasto['id_gasto'] }}">Editar</a>
-                        <a href="#" class="btn btn-sm btn-danger delete-btn"
-                            data-id="{{ gasto['id_gasto'] }}">Eliminar</a>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-center">No hay gastos registrados.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Categoría</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gasto in gastos %}
+                    <tr {% if gasto.monto> 40 %}class="table-danger"{% endif %}>
+                        <td>{{ gasto['tipo'] }}</td>
+                        <td>{{ gasto['categoria'] }}</td>
+                        <td>C$ {{ "%.2f"|format(gasto['monto']) }}</td>
+                        <td>{{ gasto['fecha'] }}</td>
+                        <td>{{ gasto['descripcion'] }}</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-success edit-btn edit-user-btn"
+                                data-id="{{ gasto['id_gasto'] }}">Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger delete-btn"
+                                data-id="{{ gasto['id_gasto'] }}">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No hay gastos registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutBtn = document.querySelector('a[href="{{ url_for("logout") }}"]');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Está seguro que desea cerrar el sistema?',
+                        icon: 'warning',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, cerrar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = logoutBtn.href;
+                        }
+                    });
+                });
+            }
+        });
     </script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+    
+    
 </body>
 
 </html>
