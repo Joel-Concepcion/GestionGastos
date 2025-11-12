@@ -1,12 +1,12 @@
 ## Instalacion de archivos de requerimientos
 
-**Crear el entorno virtual: **
+** Crear el entorno virtual: **
 python -m venv venv
 
-**Crear el archivo: **
+** Crear el archivo: **
 pip freeze > requirements.txt
 
-**Instalarlo**
+** Instalarlo **
 pip install -r requirements.txt
 
 ## RECURSOS: 
