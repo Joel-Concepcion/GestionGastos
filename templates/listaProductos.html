@@ -28,6 +28,8 @@
     <!-- Tu estilo -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
 
+
+
     <style>
         .bg {
             background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
@@ -83,16 +85,23 @@
 
             50% {
                 background-position: 100% 50%;
-            }
+
 
             100% {
                 background-position: 0% 50%;
             }
         }
-        .button{
-            background-color: #0019f8;
+        .button {
+            background-color:  #000;
+
         }
-    
+        .buttons-colvis {
+            position: absolute;
+            visibility: hidden;
+            height: 0;
+            width: 0;
+            overflow: hidden;
+        }
     </style>
 
 </head>
@@ -120,7 +129,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Productos
+                                Gastos
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
@@ -316,23 +325,23 @@
                 {% endfor %}
             </div>
             <!-- Botones de exportación VISIBLES -->
-            <div class="d-flex gap-2 flex-wrap mb-3">
-                <button class="btn btn-primary" onclick="table.button('.buttons-copy').trigger()">
+            <!--div class="d-flex gap-2 flex-wrap mb-3">
+                <button class="btn btn-primary btn-sm" onclick="table.button('.buttons-copy').trigger()">
                     <i class="bi bi-clipboard"></i> Copiar
                 </button>
-                <button class="btn btn-success" onclick="table.button('.buttons-excel').trigger()">
+                <button class="btn btn-success btn-sm" onclick="table.button('.buttons-excel').trigger()">
                     <i class="bi bi-file-earmark-excel-fill"></i> Excel
                 </button>
-                <button class="btn btn-danger" onclick="table.button('.buttons-pdf').trigger()">
+                <button class="btn btn-danger btn-sm" onclick="table.button('.buttons-pdf').trigger()">
                     <i class="bi bi-file-earmark-pdf-fill"></i> PDF
                 </button>
-                <button class="btn btn-info" onclick="table.button('.buttons-print').trigger()">
+                <button class="btn btn-info btn-sm" onclick="table.button('.buttons-print').trigger()">
                     <i class="bi bi-printer-fill"></i> Imprimir
                 </button>
-                <button class="btn btn-secondary" onclick="table.button('.buttons-colvis').trigger()">
+                <button class="btn btn-secondary btn-sm" onclick="table.button('.buttons-colvis').trigger()">
                     <i class="bi bi-eye-fill"></i> Columnas
                 </button>
-            </div>
+            </div-->
             <style>
                 table.dataTable thead {
                     display: table-header-group !important;
@@ -471,52 +480,48 @@
                      '<"row"<"col-sm-12"tr>>' +
                      '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>' +
                      '<"row"<"col-sm-12"B>>',*/
-                    
+                     dom: 'Bfrtip',
+
                 buttons: [
-                    {
-                        extend: 'copy',
-                        text: '<i class="bi bi-clipboard"></i> Copiar',
-                        titleAttr: 'Copiar tabla',
-                        className: 'btn btn-primary btn-sm',
-                        exportOptions: {
-                            columns: ':not(:last-child)' // Excluir columna Acciones
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
-                        titleAttr: 'Exportar a Excel',
-                        className: 'btn btn-success btn-sm',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
-                        titleAttr: 'Exportar a PDF',
-                        className: 'btn btn-danger btn-sm',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="bi bi-printer-fill"></i> Imprimir',
-                        titleAttr: 'Imprimir',
-                        className: 'btn btn-info btn-sm',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'colvis',
-                        text: '<i class="bi bi-eye-fill"></i> Columnas',
-                        titleAttr: 'Visibilidad de columnas',
-                        className: 'btn btn-secondary btn-sm',
-                        columns: ':not(:last-child)'
-                    }
-                ],
+                            {
+                                extend: 'copy',
+                                text: '<i class="bi bi-clipboard"></i> Copiar',
+                                className: 'btn btn-warning btn-lg me-2 rounded',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                                className: 'btn btn-success btn-lg me-2 rounded',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
+                                className: 'btn btn-danger btn-lg me-2 rounded',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="bi bi-printer-fill"></i> Imprimir',
+                                className: 'btn btn-info btn-lg me-2 rounded me-2',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            {
+                                extend: 'colvis',
+                                text: '<i class="bi bi-eye-fill"></i> Columnas',
+                                className: 'btn btn-secondary btn-lg me-2 rounded',
+                                columns: ':not(:last-child)'
+                            }
+                    ],
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                 },
@@ -543,6 +548,7 @@
 
             console.log('DataTable inicializado correctamente');
         });
+
     </script>
 
 

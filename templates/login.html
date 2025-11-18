@@ -1,101 +1,361 @@
-{% block titulo %}Login{% endblock %}
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login Mejorado</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.min.css" rel="stylesheet">
-
-    <!--Dependencias-->
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS + Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        :root {
+            --primary-color: #4e73df;
+            --success-color: #1cc88a;
+            --light-bg: #f8f9fc;
+            --dark-text: #5a5c69;
+        }
+        
+        body {
+            background: var(--light-bg);
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .login-container {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .left-panel {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--success-color) 100%);
+            color: white;
+            padding: 2.5rem;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2.5rem;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d3e2;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5ccc;
+            border-color: #3a5ccc;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .btn-success:hover {
+            background-color: #17a673;
+            border-color: #17a673;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6e707e;
+            cursor: pointer;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
         .alert {
             margin-top: 10px;
-            background-color: #FFF000;
-            width: 280px;
-            left: 30;
-            color: red;
-            font-weight: bold;
-            border-radius: 40px;
+            background-color: #f8f9fc;
+            border: 1px solid #e3e6f0;
+            color: var(--dark-text);
+            font-weight: 600;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+        
+        .alert-danger {
+            color: #e74a3b;
+            border-color: #f5c6cb;
+            background-color: #f8d7da;
+        }
+        
+        .alert-success {
+            color: #1c7565;
+            border-color: #c3e6cb;
+            background-color: #d4edda;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #b7b9cc;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .divider span {
+            padding: 0 1rem;
+        }
+        
+        .google-btn {
+            background-color: white;
+            border: 1px solid #d1d3e2;
+            color: var(--dark-text);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .google-btn:hover {
+            background-color: #f8f9fc;
+            border-color: #b7b9cc;
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .validation-message {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .valid-feedback {
+            color: var(--success-color);
+            display: none;
+        }
+        
+        .invalid-feedback {
+            color: #e74a3b;
+            display: none;
+        }
+        
+        .was-validated .form-control:valid ~ .valid-feedback,
+        .was-validated .form-control:invalid ~ .invalid-feedback {
+            display: block;
+        }
+        
+        .illustration {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .left-panel {
+                padding: 1.5rem;
+            }
+            .form-container {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 
-<body style="background:#f8f9fa;">
+<body>
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="d-flex flex-column flex-md-row rounded-4 shadow overflow-hidden"
-                    style="background:#cbe7db;">
+            <div class="col-lg-10">
+                <div class="d-flex flex-column flex-md-row rounded-4 login-container overflow-hidden">
                     <!-- Panel izquierdo -->
-                    <div class="flex-fill p-4 text-center" style="background:#606368; color:#fff;">
-                        <img src="{{url_for('static', filename='img/login.webp')}}" style="width:250px;" alt="icono">
-                        <h2 id="panel-title">¡Bienvenido!</h2>
-                        <p id="panel-desc">Ingresar información de registro</p>
-                        <button id="toggle-btn" class="btn btn-success mt-3">Iniciar Sesión</button>
+                    <div class="flex-fill left-panel text-center d-flex flex-column justify-content-center">
+                        <img src="{{url_for('static', filename='img/login.webp')}}" class="illustration" style="width:400px;" alt="icono">
+                        <h2 id="panel-title" class="mb-3">¡Bienvenido!</h2>
+                        <p id="panel-desc" class="mb-4">Ingresa tu información para acceder a tu cuenta</p>
+                        <button id="toggle-btn" class="btn btn-light mt-3 align-self-center">Registrarse</button>
                     </div>
+                    
                     <!-- Panel derecho -->
-                    <div class="flex-fill p-4">
+                    <div class="flex-fill form-container">
                         <!-- Login -->
                         <div id="login-form">
-                            <h3 class="text-center mb-3">Iniciar Sesión</h3>
-                            <button class="btn btn-light w-100 mb-2">
-                                <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
+                            <h3 class="form-title text-center">Iniciar Sesión</h3>
+                            <button class="google-btn w-100 mb-3">
+                                <i class="fab fa-google me-2"></i>
                                 Iniciar sesión con Google
                             </button>
-                            <div class="text-center mb-2">o Iniciar Sesión con una cuenta</div>
-                            <form action="{{ url_for('login') }}" method="POST">
-                                <!-- Input de correo con tooltip -->
-                                <input type="email" class="form-control mb-2" placeholder="Correo electrónico"
-                                    name="email" required data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="Ingresa tu correo electrónico válido">
-
-                                <!-- Input de contraseña con tooltip -->
-                                <input type="password" class="form-control mb-3" placeholder="Password" name="password"
-                                    required data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="Tu contraseña debe tener al menos 8 caracteres">
-                                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-
-                                {% if error %}
-                                <div class="alert alert-danger" role="alert">
-                                    ⚠ {{error}} ⚠
+                            
+                            <div class="divider">
+                                <span>o inicia sesión con tu cuenta</span>
+                            </div>
+                            
+                            <form id="loginForm" method="POST" action="{{ url_for('login') }}" class="needs-validation" novalidate>
+                                <input type="hidden" name="form_type" value="login">
+                                
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="loginEmail" name="email" placeholder="usuario@ejemplo.com" required>
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Correo válido
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> Por favor, ingresa un correo electrónico válido
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Contraseña</label>
+                                    <div class="password-container">
+                                        <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Ingresa tu contraseña" required minlength="6">
+                                        <button type="button" class="password-toggle" id="toggleLoginPassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Contraseña válida
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> La contraseña debe tener al menos 6 caracteres
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label" for="rememberMe">
+                                            Recordarme
+                                        </label>
+                                    </div>
+                                    <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100 py-2">Iniciar Sesión</button>
+                                
+                                <!-- Mensajes de error desde el backend -->
+                                {% if error and error != 'Usuario registrado exitosamente' %}
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i> {{ error }}
+                                </div>
+                                {% endif %}
+                                
+                                {% if error == 'Usuario registrado exitosamente' %}
+                                <div class="alert alert-success mt-3" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i> {{ error }}
                                 </div>
                                 {% endif %}
                             </form>
                         </div>
+                        
                         <!-- Registro -->
                         <div id="register-form" style="display:none;">
-                            <h3 class="text-center mb-3">Bienvenidos</h3>
-                            <button class="btn btn-light w-100 mb-2">
-                                <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
-                                Iniciar sesión con Google
+                            <h3 class="form-title text-center">Crear Cuenta</h3>
+                            <button class="google-btn w-100 mb-3">
+                                <i class="fab fa-google me-2"></i>
+                                Registrarse con Google
                             </button>
-                            <div class="text-center mb-2">o Usar tu email para registrarse</div>
-                            <form action="{{ url_for('login') }}" method="POST">
-                                <!-- Nombre completo con tooltip -->
-                                <input type="text" class="form-control mb-2" placeholder="Nombre completo" name="nombre"
-                                    required data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="Escribe tu nombre completo tal como aparece en tu documento de identidad">
-
-                                <!-- Correo electrónico con tooltip -->
-                                <input type="email" class="form-control mb-2" placeholder="Correo electrónico"
-                                    name="email" required data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="Ingresa un correo electrónico válido para recibir notificaciones">
-
-                                <!-- Contraseña con tooltip -->
-                                <input type="password" class="form-control mb-3" placeholder="Contraseña"
-                                    name="password" required data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="La contraseña debe tener al menos 8 caracteres y combinar letras y números">
-                                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                            
+                            <div class="divider">
+                                <span>o regístrate con tu email</span>
+                            </div>
+                            
+                            <form id="registerForm" method="POST" action="{{ url_for('login') }}" class="needs-validation" novalidate>
+                                <input type="hidden" name="form_type" value="register">
+                                
+                                <div class="mb-3">
+                                    <label for="registerName" class="form-label">Nombre completo</label>
+                                    <input type="text" class="form-control" id="registerName" name="nombre" placeholder="Ingresa tu nombre completo" required pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,}">
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Nombre válido
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> El nombre debe tener al menos 2 caracteres y solo letras
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="registerEmail" name="email" placeholder="usuario@ejemplo.com" required>
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Correo válido
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> Por favor, ingresa un correo electrónico válido
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Contraseña</label>
+                                    <div class="password-container">
+                                        <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Crea una contraseña segura" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$">
+                                        <button type="button" class="password-toggle" id="toggleRegisterPassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Contraseña segura
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+                                    <div class="password-container">
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Repite tu contraseña" required>
+                                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        <i class="fas fa-check-circle"></i> Las contraseñas coinciden
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle"></i> Las contraseñas no coinciden
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                                    <label class="form-check-label" for="acceptTerms">
+                                        Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a>
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Debes aceptar los términos y condiciones
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success w-100 py-2">Crear Cuenta</button>
                             </form>
                         </div>
                     </div>
@@ -104,34 +364,135 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.all.min.js"></script>
+    
     <script>
+        // Elementos del DOM
         const toggleBtn = document.getElementById('toggle-btn');
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
         const panelTitle = document.getElementById('panel-title');
         const panelDesc = document.getElementById('panel-desc');
-
+        
+        // Formularios
+        const loginFormElement = document.getElementById('loginForm');
+        const registerFormElement = document.getElementById('registerForm');
+        
+        // Botones para mostrar/ocultar contraseña
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        
+        // Campos de contraseña
+        const loginPassword = document.getElementById('loginPassword');
+        const registerPassword = document.getElementById('registerPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        // Alternar entre formularios de login y registro
         toggleBtn.addEventListener('click', function () {
             if (loginForm.style.display === 'none') {
-                loginForm.style.display = '';
+                loginForm.style.display = 'block';
                 registerForm.style.display = 'none';
                 panelTitle.textContent = '¡Bienvenido!';
-                panelDesc.textContent = 'Ingresar información de registro';
+                panelDesc.textContent = 'Ingresa tu información para acceder a tu cuenta';
                 toggleBtn.textContent = 'Registrarse';
             } else {
                 loginForm.style.display = 'none';
-                registerForm.style.display = '';
+                registerForm.style.display = 'block';
                 panelTitle.textContent = '¡Bienvenido Nuevamente!';
-                panelDesc.textContent = 'Si aun no tienes una cuenta por favor regístrese aquí';
+                panelDesc.textContent = 'Si aún no tienes una cuenta por favor regístrate aquí';
                 toggleBtn.textContent = 'Iniciar Sesión';
             }
         });
+        
+        // Función para mostrar/ocultar contraseña
+        function togglePasswordVisibility(passwordField, toggleButton) {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Cambiar icono
+            const icon = toggleButton.querySelector('i');
+            if (type === 'password') {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+        
+        // Event listeners para los botones de mostrar/ocultar contraseña
+        toggleLoginPassword.addEventListener('click', function() {
+            togglePasswordVisibility(loginPassword, toggleLoginPassword);
+        });
+        
+        toggleRegisterPassword.addEventListener('click', function() {
+            togglePasswordVisibility(registerPassword, toggleRegisterPassword);
+        });
+        
+        toggleConfirmPassword.addEventListener('click', function() {
+            togglePasswordVisibility(confirmPassword, toggleConfirmPassword);
+        });
+        
+        // Validación personalizada para confirmar contraseña
+        confirmPassword.addEventListener('input', function() {
+            if (registerPassword.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Las contraseñas no coinciden');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        });
+        
+        // Validación del formulario de registro
+        registerFormElement.addEventListener('submit', function(event) {
+            // Validar que las contraseñas coincidan
+            if (registerPassword.value !== confirmPassword.value) {
+                event.preventDefault();
+                confirmPassword.setCustomValidity('Las contraseñas no coinciden');
+                registerFormElement.classList.add('was-validated');
+                confirmPassword.reportValidity();
+                return;
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+            
+            // Si todo está válido, el formulario se enviará normalmente
+            // Tu backend Flask se encargará del registro y redirección
+        });
+        
+        // Validación en tiempo real para mejorar la experiencia de usuario
+        const fields = document.querySelectorAll('.form-control');
+        fields.forEach(field => {
+            field.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                    this.classList.add('is-invalid');
+                }
+            });
+        });
+        
+        // Mostrar mensajes de éxito/error si existen
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorAlert = document.querySelector('.alert');
+            if (errorAlert) {
+                // Si hay un mensaje de éxito (registro exitoso), mostrar el formulario de login
+                if (errorAlert.classList.contains('alert-success')) {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    panelTitle.textContent = '¡Bienvenido!';
+                    panelDesc.textContent = 'Ingresa tu información para acceder a tu cuenta';
+                    toggleBtn.textContent = 'Registrarse';
+                }
+                
+                // Scroll suave al mensaje
+                errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
     </script>
-    <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.23.0/dist/sweetalert2.all.min.js"></script>
 </body>
 
 </html>

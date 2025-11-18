@@ -83,6 +83,8 @@ icons.min.css">
     <link rel="stylesheet" href="#">
 
     <link href="DataTables/datatables.min.css" rel="stylesheet">
+
+    <!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script-->
 </head>
 
 <body class="bg-success bg-opacity-10">
@@ -93,9 +95,8 @@ icons.min.css">
             <div class="container">
                 <a class="navbar-brand" href="#">Sistema</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-
-                    target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -109,7 +110,7 @@ icons.min.css">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Productos
+                                Gastos
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
@@ -143,20 +144,17 @@ icons.min.css">
 
     <!-- Contenedor de tarjetas -->
     <div class="container mt-5">
-        <h2 class=" text-center py-4"
-            style=" color: #ffffff; background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">Sistema de Gestión de
-            gastos</h2>
+        <h2 class=" text-center py-4" style=" color: #ffffff; background: linear-gradient(220deg, #ffffff,#4354ec,#0019f8);">Sistema de Gestión de gastos</h2>
         <p></p>
         <div class="row justify-content-center">
             <!-- Tarjeta 1: Perfil del Usuario -->
             <div class="col-md-4 mb-4">
                 <div class="card h-100 text-center bg-success-subtle">
                     <div class="card-body">
-                        <img src="{{ url_for('static', filename='img/Connected-amico.png') }}" alt="Usuarios"
+                        <img src="{{url_for('static', filename='img/Connected-amico.png')}}" alt="Usuarios"
                             class="card-img-top mb-3" style="max-width: 100px;">
                         <h5 class="card-title">Perfil del Usuario</h5>
-                        <p class="card-text">Registrados: <strong>{{ contadorUsuarios }}</strong></p>
-                        <a href="{{ url_for('listaUsuario') }}" class="btn btn-success">Ver Detalles</a>
+                        <a href="{{url_for('listaUsuario') }}" class="btn btn-success">Ver Detalles</a>
                     </div>
                 </div>
             </div>
@@ -168,7 +166,6 @@ icons.min.css">
                         <img src="{{url_for('static', filename='img/Spreadsheets-bro (1).png')}}" alt="Carrito"
                             class="card-img-top mb-3" style="max-width: 100px;">
                         <h5 class="card-title">Registrar Gastos</h5>
-                        <p class="card-text">Registrados: <strong>{{ contadorGastos }}</strong></p>
                         <a href="{{url_for('control') }}" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
@@ -195,7 +192,7 @@ icons.min.css">
     <footer>
         <hr>
         <div class="container bg-light">
-            <p class="text-center">Copyright © 2025 - UNAN Managua</p>
+            <p class="text-center">© 2025 - JoelTellez Todos los derechos reservados.</p>
         </div>
     </footer>
     <!-- Bootstrap JavaScript Libraries -->

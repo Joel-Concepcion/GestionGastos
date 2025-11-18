@@ -96,7 +96,6 @@
                 background-position: 0% 50%;
             }
         }
-    
     </style>
 
     <!-- iconos de bootstrap -->
@@ -133,7 +132,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Productos
+                                Gastos
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
@@ -148,7 +147,7 @@
                             <a class="nav-link" href="#"></a>
                         </li>
                     </ul>
-                    <!-- Botón de salir -->     
+                    <!-- Botón de salir -->
                     <a class="btn btn1" href="{{ url_for('logout') }}">SALIR</a>
                 </div>
             </div>
@@ -191,7 +190,7 @@
                                             <label for="nombre" class="form-label">Nombre Completo</label>
                                         </div>
                                         <div class=" form-floating mb-2">
-                                            <input type="text" class="form-control" name="email" id="email"
+                                            <input type="email" class="form-control" name="email" id="email"
                                                 aria-describedby="helpId" placeholder="Correo Electronico" required="">
 
                                             <label for="email" class="form-label">Correo Electronico</label>
@@ -266,33 +265,46 @@
 
             </div>
             <p>Total usuarios: {{ usuarios|length }}</p>
-            <table class="table table-hover table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Nº</th>
-                        <th scope="col">Correo</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for usuario in usuarios %}
-                    <tr>
-                        <td>{{loop.index}}</td>
-                        <td>{{ usuario['email'] }}</td>
-                        <td>{{ usuario['password'] }}</td>
-                        <td>
-                            <a href="javascript:void(0);" class="btn btn-success btn-sm edit-user-btn"
-                                data-bs-toggle="modal" data-bs-target="#modaledit{{ usuario.id }}">Editar</a>
-
-                            <a href="javascript:void(0);" onclick="confirmarEliminacion(this)"
-                                data-id="{{ usuario.id }}" class="btn btn-danger btn-sm">Eliminar</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
+            <div class="table-responsive">
+                <table id="tablaUsuarios" class="table table-hover table-striped display nowrap" style="width:100%">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" width="5%">Nº</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Password</th>
+                            <th scope="col" width="15%">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ usuario['email'] }}</td>
+                            <td>
+                                <span class="text-truncate d-inline-block" style="max-width: 150px;"
+                                    title="{{ usuario['password'] }}">
+                                    {{ usuario['password'] }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-success edit-user-btn" data-bs-toggle="modal"
+                                        data-bs-target="#modaledit{{ usuario.id }}">
+                                        <i class="bi bi-pencil"></i>
+                                        <span class="d-none d-sm-inline">Editar</span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="confirmarEliminacion(this)"
+                                        data-id="{{ usuario.id }}">
+                                        <i class="bi bi-trash"></i>
+                                        <span class="d-none d-sm-inline">Eliminar</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
         </div>
 
@@ -322,7 +334,7 @@
     <footer>
         <hr>
         <div class="container bg-light">
-            <p class="text-center">Copyright © 2025 - UNAN Managua</p>
+            <p class="text-center">© 2025 - JoelTellez Todos los derechos reservados.</p>
         </div>
     </footer>
 
@@ -431,31 +443,35 @@
             });
 
         }
-        
+
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('form-actualizar');
+            const formularios = document.querySelectorAll('form[id^="form-actualizar"]');
 
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); // Evita el envío tradicional
+            formularios.forEach(function (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault(); // Evita el envío tradicional
 
-                const formData = new FormData(form);
+                    const formData = new FormData(form);
 
-                fetch('/updateUsuario', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire('Éxito', 'Usuario actualizado correctamente', 'success');
-                            // Opcional: cerrar modal, recargar tabla, etc.
-                        } else {
-                            Swal.fire('Error', data.message || 'No se pudo actualizar el usuario.', 'error');
-                        }
+                    fetch('/updateUsuario', {
+                        method: 'POST',
+                        body: formData
                     })
-                    .catch(error => {
-                        Swal.fire('Error', 'Ocurrió un problema al actualizar.', 'error');
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Éxito', data.message || 'Usuario actualizado correctamente', 'success')
+                                    .then(() => {
+                                        location.reload(); // Recarga la página para ver los cambios
+                                    });
+                            } else {
+                                Swal.fire('Error', data.message || 'No se pudo actualizar el usuario.', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Ocurrió un problema al actualizar.', 'error');
+                        });
+                });
             });
         });
         /*
@@ -474,11 +490,11 @@
     </script>
 
     <!--MENSAJE DE ALERTA Flash y SweetAlert2
-  
-  
+
+
   -->
 
-    <!-- MENSAJE DE ALERTA BIENVENIDA DEL SISTEMA 
+    <!-- MENSAJE DE ALERTA BIENVENIDA DEL SISTEMA
 
 
   -->

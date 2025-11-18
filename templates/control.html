@@ -14,13 +14,8 @@
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS + Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <style>
-        .bg {
+       .bg {
             background: -webkit-linear-gradient(90deg, #0047cc, #005aff, #3898ff);
             background: linear-gradient(90deg, #0047cc, #005aff, #3898ff);
         }
@@ -29,7 +24,7 @@
             position: relative;
             background: -webkit-linear-gradient(90deg, #0061fe, #be38f3);
             /*background: linear-gradient(90deg, #0061fe, #be38f3);*/
-            color: #000000;
+            color: #ffffff;
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
@@ -80,6 +75,7 @@
                 background-position: 0% 50%;
             }
         }
+
     </style>
 
 </head>
@@ -106,7 +102,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Productos
+                            Gastos
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{url_for('control') }}">Agregar</a></li>
@@ -180,25 +176,21 @@
                                 <i class="bi bi-cash-stack me-1 text-primary"></i>Monto
                             </label>
                             <input type="number" step="0.01" class="form-control border-primary-subtle shadow-sm"
-                                id="monto" name="monto" placeholder="Ej: 120.50" required data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Ingresa el monto del gasto en formato decimal">
+                                id="monto" name="monto" placeholder="Ej: 120.50" required>
                         </div>
                         <div class="col-md-4">
                             <label for="fecha" class="form-label fw-semibold">
                                 <i class="bi bi-calendar-event me-1 text-primary"></i>Fecha
                             </label>
                             <input type="date" class="form-control border-primary-subtle shadow-sm" id="fecha"
-                                name="fecha" required data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Selecciona la fecha del gasto">
+                                name="fecha" required>
                         </div>
                         <div class="col-md-4">
                             <label for="descripcion" class="form-label fw-semibold">
                                 <i class="bi bi-chat-left-text me-1 text-primary"></i>Descripción
                             </label>
                             <input type="text" class="form-control border-primary-subtle shadow-sm" id="descripcion"
-                                name="descripcion" placeholder="Agrega una breve descripción" required
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Describe brevemente el gasto realizado">
+                                name="descripcion" placeholder="Agrega una breve descripción" required>
                         </div>
                     </div>
 
@@ -249,10 +241,7 @@
             </tbody>
         </table>
     </div>
-    <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
-    </script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
