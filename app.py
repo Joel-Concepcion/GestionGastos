@@ -9,11 +9,11 @@ app = Flask(__name__)
 app.secret_key = 'clave_secreta_segura'
 
 # Configuración de la base de datos
-app.config['MYSQL_HOST'] = 'bzriokq8w1ja8kilnhbl-mysql.services.clever-cloud.com'
+app.config['MYSQL_HOST'] = 'bw3d3abizdnftpjmzgo7-mysql.services.clever-cloud.com'
 app.config['MYSQL_PORT'] = 3306
-app.config['MYSQL_USER'] = 'uvf565cymdupuorh'
-app.config['MYSQL_PASSWORD'] = 'xmm8z4rlb5etk2jbTIEK'
-app.config['MYSQL_DB'] = 'bzriokq8w1ja8kilnhbl'
+app.config['MYSQL_USER'] = 'urqugiw8trrndurs'
+app.config['MYSQL_PASSWORD'] = 'ikimfQEFBSyChpKWgtB8'
+app.config['MYSQL_DB'] = 'bw3d3abizdnftpjmzgo7'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
